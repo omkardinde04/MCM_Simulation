@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Chain Simulation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Matrix Chain Multiplication Simulation</h2>
+        <label>Enter Matrix Dimensions (comma-separated):</label>
+        <input type="text" id="dimensions" value="30,35,15,5,10,20,25">
+        <button onclick="compute()">Compute</button>
+
+        <h3>Computation Matrix:</h3>
+        <div id="matrix-container"></div>
+
+        <h3>Minimum Multiplications: <span id="min_cost"></span></h3>
+    </div>
+
+    <script>
+        function createMatrix(n) {
+            let container = document.getElementById("matrix-container");
+            container.innerHTML = ""; // Clear previous matrix
+
+            let table = document.createElement("table");
+            table.className = "matrix";
+
+            for (let i = 0; i < n; i++) {
+                let row = document.createElement("tr");
+                for (let j = 0; j < n; j++) {
+                    let cell = document.createElement("td");
+                    cell.id = `cell-${i}-${j}`;
+                    cell.innerText = "-"; // Placeholder
+                    row.appendChild(cell);
+                }
+                table.appendChild(row);
+            }
+            container.appendChild(table);
+        }
+
+        function compute() {
+            let dims = document.getElementById('dimensions').value.split(',').map(Number);
+            let n = dims.length - 1;
+            createMatrix(n); // Create matrix structure
+
+            fetch('/compute', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ dimensions: dims })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('min_cost').innerText = data.min_cost;
+
+                    data.steps.forEach((step, index) => {
+                        setTimeout(() => {
+                            let cell = document.getElementById(`cell-${step.i}-${step.j}`);
+                            cell.innerText = step.cost;
+                            cell.classList.add("highlight");
+
+                            // Remove highlight after animation
+                            setTimeout(() => cell.classList.remove("highlight"), 1000);
+                        }, index * 1000);
+                    });
+                });
+        }
+    </script>
+</body>
+
+</html>
