@@ -1,41 +1,47 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matrix Chain Simulation</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Matrix Chain Multiplication</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
+    <h1 style="text-align: center;">Matrix Chain Multiplication</h1>
     <div class="container">
-        <h2>Matrix Chain Multiplication Simulation</h2>
-        <label>Enter Matrix Dimensions (comma-separated):</label>
-        <input type="text" id="dimensions" value="30,35,15,5,10,20,25">
-        <button onclick="compute()">Compute</button>
-
-        <h3>Computation Matrix:</h3>
-        <div id="matrix-container"></div>
-
-        <h3>Minimum Multiplications: <span id="min_cost"></span></h3>
+        <div class="top-section">
+            <div class="input-section">
+                <label for="dimensions">Enter List of numbers</label>
+                <input type="text" id="dimensions" value="90,234,4,3,52,52">
+                <div class="buttons">
+                    <button onclick="compute()">Solve</button>
+                </div>
+            </div>
+            <div class="visual-section">
+                <h3>Visualisation</h3>
+                <div id="dimension-visual"></div>
+                <div id="matrix-container"></div>
+            </div>
+        </div>
+        <div class="bottom-section">
+            <h3>Steps:</h3>
+            <ul id="steps-list"></ul>
+        </div>
     </div>
 
     <script>
         function createMatrix(n) {
-            let container = document.getElementById("matrix-container");
-            container.innerHTML = ""; // Clear previous matrix
-
-            let table = document.createElement("table");
-            table.className = "matrix";
+            const container = document.getElementById("matrix-container");
+            container.innerHTML = "";
+            const table = document.createElement("table");
 
             for (let i = 0; i < n; i++) {
-                let row = document.createElement("tr");
+                const row = document.createElement("tr");
                 for (let j = 0; j < n; j++) {
-                    let cell = document.createElement("td");
+                    const cell = document.createElement("td");
                     cell.id = `cell-${i}-${j}`;
-                    cell.innerText = "-"; // Placeholder
+                    cell.innerText = "";
                     row.appendChild(cell);
                 }
                 table.appendChild(row);
@@ -43,33 +49,61 @@
             container.appendChild(table);
         }
 
-        function compute() {
-            let dims = document.getElementById('dimensions').value.split(',').map(Number);
-            let n = dims.length - 1;
-            createMatrix(n); // Create matrix structure
+        function showDimensions(dims) {
+            const visual = document.getElementById("dimension-visual");
+            visual.innerHTML = "";
+            dims.forEach(d => {
+                const box = document.createElement("span");
+                box.className = "dim-box";
+                box.innerText = d;
+                visual.appendChild(box);
+            });
+        }
 
-            fetch('/compute', {
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function compute() {
+            const dims = document.getElementById('dimensions').value.split(',').map(Number);
+            const n = dims.length - 1;
+            createMatrix(n);
+            showDimensions(dims);
+
+            const stepsList = document.getElementById('steps-list');
+            stepsList.innerHTML = "";
+
+            const response = await fetch('/compute', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ dimensions: dims })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('min_cost').innerText = data.min_cost;
+            });
 
-                    data.steps.forEach((step, index) => {
-                        setTimeout(() => {
-                            let cell = document.getElementById(`cell-${step.i}-${step.j}`);
-                            cell.innerText = step.cost;
-                            cell.classList.add("highlight");
+            const data = await response.json();
 
-                            // Remove highlight after animation
-                            setTimeout(() => cell.classList.remove("highlight"), 1000);
-                        }, index * 1000);
-                    });
-                });
+            for (let index = 0; index < data.steps.length; index++) {
+                const step = data.steps[index];
+                const cell = document.getElementById(`cell-${step.i}-${step.j}`);
+                const oldValue = cell.innerText;
+                if (oldValue !== step.cost.toString()) {
+                    cell.innerText = step.cost;
+                    cell.classList.add("value-changed");
+                    setTimeout(() => cell.classList.remove("value-changed"), 1000);
+                }
+
+                const stepItem = document.createElement("li");
+                stepItem.innerHTML = `
+                    <strong>${index + 1}. Start Calculating C[${step.i + 1}][${step.j + 1}]</strong><br>
+                    ${step.expression}<br><br>
+                    C[${step.i + 1}][${step.j + 1}] = ${step.cost}
+                `;
+                stepsList.appendChild(stepItem);
+                stepItem.classList.add("current-step");
+
+                await sleep(1000);
+                stepItem.classList.remove("current-step");
+            }
         }
     </script>
 </body>
-
 </html>

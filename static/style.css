@@ -1,59 +1,105 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    text-align: center;
+    background-color: #1e2433;
+    color: #fff;
     padding: 20px;
 }
 
 .container {
-    background: rgb(251, 252, 232);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
+    max-width: 1200px;
     margin: auto;
+    padding: 20px;
+    background-color: #2a2f45;
+    border-radius: 10px;
 }
 
-input {
+.top-section {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.input-section,
+.visual-section {
+    flex: 1;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+input[type="text"] {
+    width: 100%;
     padding: 10px;
-    width: 80%;
-    margin: 10px 0;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+}
+
+.buttons {
+    margin-top: 10px;
 }
 
 button {
     padding: 10px 15px;
     background-color: #007bff;
-    color: white;
     border: none;
+    border-radius: 5px;
+    color: #fff;
+    margin-right: 10px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: background-color 0.3s;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-/* Matrix Styling */
-.matrix {
-    width: 100%;
+#matrix-container table {
     border-collapse: collapse;
     margin-top: 15px;
 }
 
-.matrix td {
-    width: 50px;
-    height: 50px;
+#matrix-container td {
+    width: 60px;
+    height: 40px;
+    border: 1px solid #999;
     text-align: center;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    background: #ffffff;
-    transition: background 0.5s ease-in-out;
+    vertical-align: middle;
+    background-color: #1a1a1a;
+    color: white;
+    transition: background-color 0.3s ease;
 }
 
-/* Animation Effect */
-.highlight {
+.value-changed {
+    background-color: #22b444 !important;
+    
+}
 
+.dim-box {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 8px 12px;
+    background-color: #444;
+    color: #fff;
+    border: 1px solid #999;
+    border-radius: 5px;
+}
+
+.bottom-section {
+    margin-top: 40px;
+    background-color: #1c2235;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#steps-list li {
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.current-step {
+    color: #00ccff;
     font-weight: bold;
-    color: #0056b3;
-    background-color: aqua;
 }
