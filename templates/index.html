@@ -16,6 +16,10 @@
                 <input type="text" id="dimensions" value="90,234,4,3,52,52">
                 <div class="buttons">
                     <button onclick="compute()">Solve</button>
+                    <button onclick="stopSimulation()">Stop</button>
+                    <button onclick="restartSimulation()">Restart</button>
+                </div>
+                <div id="final-answer" style="margin-top: 20px; font-weight: bold; color: #c2f3ff;font-size: larger;">
                 </div>
             </div>
             <div class="visual-section">
@@ -31,6 +35,8 @@
     </div>
 
     <script>
+        let stopFlag = false; // Flag to control the simulation
+
         function createMatrix(n) {
             const container = document.getElementById("matrix-container");
             container.innerHTML = "";
@@ -65,6 +71,7 @@
         }
 
         async function compute() {
+            stopFlag = false; // Reset the stop flag
             const dims = document.getElementById('dimensions').value.split(',').map(Number);
             const n = dims.length - 1;
             createMatrix(n);
@@ -80,8 +87,16 @@
             });
 
             const data = await response.json();
+            console.log(data);
+
+            if (!data.steps || data.steps.length === 0) {
+                document.getElementById('final-answer').innerText = "Error: No steps returned from the server.";
+                return;
+            }
 
             for (let index = 0; index < data.steps.length; index++) {
+                if (stopFlag) break; // Stop the simulation if the flag is set
+
                 const step = data.steps[index];
                 const cell = document.getElementById(`cell-${step.i}-${step.j}`);
                 const oldValue = cell.innerText;
@@ -103,7 +118,30 @@
                 await sleep(1000);
                 stepItem.classList.remove("current-step");
             }
+
+            // Display the final answer
+            const finalAnswer = document.getElementById('final-answer');
+            finalAnswer.innerText = `Minimum number of multiplications: ${data.final_answer}`;
+        }
+
+        function stopSimulation() {
+            stopFlag = true; // Set the stop flag to true
+        }
+
+        function restartSimulation() {
+            stopFlag = true; // Stop the current simulation
+            const stepsList = document.getElementById('steps-list');
+            const matrixContainer = document.getElementById('matrix-container');
+            const dimensionVisual = document.getElementById('dimension-visual');
+            const finalAnswer = document.getElementById('final-answer');
+
+            // Clear all visual elements
+            stepsList.innerHTML = "";
+            matrixContainer.innerHTML = "";
+            dimensionVisual.innerHTML = "";
+            finalAnswer.innerHTML = "";
         }
     </script>
 </body>
+
 </html>

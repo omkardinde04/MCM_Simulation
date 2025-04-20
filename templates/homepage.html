@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="../static/homepage.css">
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <h1>MCM Simulator</h1>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2>Welcome to the MCM Simulator</h2>
+        <div class="top-section">
+            <button id="user-guide-btn">User Guide</button>
+            <button id="show-simulation-btn">Show Simulation</button>
+        </div>
+        <div id="user-guide" class="bottom-section" style="display: none;">
+            <h2>User Guide</h2>
+            <ol id="steps-list">
+                <li>Enter the matrix dimensions in the input fields provided.</li>
+                <li>Click on "Generate Matrix" to create the input matrix.</li>
+                <li>Fill in the matrix values as required.</li>
+                <li>Click on "Run Simulation" to start the simulation process.</li>
+                <li>Follow the steps displayed in the "Steps" section to understand the simulation.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <p>Created by Omkar and Neekunj</p>
+    </footer>
+
+    <script>
+        // JavaScript to toggle the User Guide section
+        document.getElementById('user-guide-btn').addEventListener('click', function () {
+            const userGuide = document.getElementById('user-guide');
+            userGuide.style.display = userGuide.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // JavaScript to redirect to the simulation page
+        document.getElementById('show-simulation-btn').addEventListener('click', function () {
+            window.location.href = "/simulation";
+        });
+    </script>
+</body>
+
+</html>

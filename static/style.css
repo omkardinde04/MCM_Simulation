@@ -76,7 +76,7 @@ button:hover {
 
 .value-changed {
     background-color: #22b444 !important;
-    
+
 }
 
 .dim-box {
@@ -96,14 +96,60 @@ button:hover {
     border-radius: 10px;
 }
 
-#steps-list li {
-    margin-bottom: 15px;
-    line-height: 1.5;
-}
+
 
 .current-step {
     color: #00ccff;
     font-weight: bold;
     color: #0056b3;
-    
+
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #00ccff;
+}
+
+#user-guide h2 {
+    color: #00ccff;
+    margin-bottom: 15px;
+}
+
+/* Steps List Styling */
+#steps-list {
+    height: 200px;
+    /* Fixed height for the steps list */
+    overflow-y: scroll;
+    /* Enable vertical scrolling */
+    padding: 15px;
+    /* Add padding for better spacing */
+    background-color: #1c2235;
+    /* Match the theme */
+    border: 1px solid #444;
+    /* Add a border for better visibility */
+    border-radius: 5px;
+    /* Rounded corners */
+    color: #c2f3ff;
+    /* Cool text color */
+    font-size: 15px;
+    /* Slightly larger font size for readability */
+    line-height: 1.6;
+    /* Add line height for better spacing between lines */
+    font-family: 'Arial', sans-serif;
+    /* Use a clean font */
+}
+
+/* Add spacing between list items */
+#steps-list li {
+    margin-bottom: 10px;
+    /* Add space between list items */
+    padding: 5px;
+    /* Add padding inside each list item */
+    background-color: #2a2f45;
+    /* Slightly different background for list items */
+    border-radius: 5px;
+    /* Rounded corners for list items */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* Add a subtle shadow for a cool effect */
 }

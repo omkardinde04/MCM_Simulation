@@ -29,14 +29,19 @@ def matrix_chain_order(p):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('homepage.html')
 
 @app.route('/compute', methods=['POST'])
 def compute():
     data = request.get_json()
     dims = data['dimensions']
     m, steps = matrix_chain_order(dims)
-    return jsonify({"steps": steps})
+    final_answer = m[0][len(dims) - 2]  # The minimum cost is stored in m[0][n-1]
+    return jsonify({"steps": steps, "final_answer": final_answer})
+
+@app.route('/simulation')
+def simulation():
+    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
